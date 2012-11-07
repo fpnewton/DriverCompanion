@@ -7,7 +7,9 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnInitListener;
@@ -153,7 +155,17 @@ public class MainActivity extends Activity implements OnInitListener
 			Log.i(TAG, matches.toString());
 			mTts.speak("You said: " + matches.get(0), TextToSpeech.QUEUE_FLUSH, null);
 		}
-
+		
+		Cursor phones = getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,null,null, null);
+		while (phones.moveToNext())
+		{
+		  String name=phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+		  String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+		  Log.i(TAG, name);
+		  Log.i(TAG, phoneNumber);
+		}
+		
+		phones.close();
 		super.onActivityResult(requestCode, resultCode, data);
 	}
 }
