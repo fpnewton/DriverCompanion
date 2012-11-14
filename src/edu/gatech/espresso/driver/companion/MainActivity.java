@@ -14,18 +14,18 @@ import android.view.View;
 
 public class MainActivity extends Activity
 {
-	private Contacts			contacts;
 	private TTS					tts;
 	private SpeechRecognizer	sr;
+	private CommandParser		parser;
 
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		contacts = new Contacts(this);
 		tts = new TTS(this);
 		sr = new SpeechRecognizer(this);
+		parser = new CommandParser(this, tts, sr);
 	}
 
 	public void onDestroy()
@@ -63,7 +63,7 @@ public class MainActivity extends Activity
 	public void btnListenClicked(View v)
 	{
 		// TODO
-		sr.startRecognizer();
+		sr.startRecognizer(SpeechRecognizer.VR_REQUEST_LISTEN);
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data)
@@ -73,20 +73,22 @@ public class MainActivity extends Activity
 
 		String results[] = sr.getResults();
 
-		if (results != null)
+		if (results == null)
 		{
-			String split[] = results[0].split(" ");
-			
-			for (String s : split)
-			{
-				Log.i(getString(R.string.log_tag), contacts.getContact(s));
-				//tts.speak("I Heard: " + s);
-				//Phone.call(contacts.getContact(s), this);
-			}
+			Log.e(getString(R.string.log_tag), "No speech results received.");
 		}
 		else
 		{
-			Log.e(getString(R.string.log_tag), "No speech results received.");
+			switch (requestCode)
+			{
+				case SpeechRecognizer.VR_REQUEST_LISTEN:
+					parser.parseCommand(results[0]);
+					break;
+
+				case SpeechRecognizer.VR_REQUEST_SMS:
+					parser.parseSms(results[0]);
+					break;
+			}
 		}
 	}
 }

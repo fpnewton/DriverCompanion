@@ -48,6 +48,8 @@ public class TTS implements OnInitListener
 			// Initialization failed
 			Log.e("@string/log_tag", "Could not initialize TextToSpeech engine.");
 		}
+		
+		speak("Welcome.");
 	}
 
 	public void speak(String text)

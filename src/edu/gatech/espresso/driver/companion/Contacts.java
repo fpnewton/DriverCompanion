@@ -18,7 +18,7 @@ public class Contacts
 		contactsCursor = activity.getContentResolver().query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
 	}
 	
-	public String getContact(String name)
+	public String[] getContact(String name)
 	{		
 		while (contactsCursor.moveToNext())
 		{			
@@ -27,15 +27,38 @@ public class Contacts
 			
 			String cntName = contactsCursor.getString(indexName);
 			String phoneNum = contactsCursor.getString(indexPhoneNum);
+			String nameSplit[] = cntName.split(" ");
 			
 			//Log.i(activity.getString(R.string.log_tag), cntName + ":" + phoneNum);
 			
-			if (cntName.equalsIgnoreCase(name))
+			if (cntName.compareToIgnoreCase(name) == 0)
 			{
-				return phoneNum;
+				String result[] = new String[2];
+				Log.i(activity.getString(R.string.log_tag), "Found: " + cntName);
+				result[0] = cntName;
+				result[1] = phoneNum;
+				
+				return result;
+			}
+			else
+			{
+				for (String part : nameSplit)
+				{
+					if (name.compareToIgnoreCase(part) == 0)
+					{
+						Log.i(activity.getString(R.string.log_tag), "Found: " + cntName);
+						
+						String result[] = new String[2];
+						
+						result[0] = cntName;
+						result[1] = phoneNum;
+						
+						return result;
+					}
+				}
 			}
 		}
 		
-		return "";
+		return null;
 	}
 }

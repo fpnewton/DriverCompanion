@@ -8,7 +8,9 @@ import android.speech.RecognizerIntent;
 
 public class SpeechRecognizer
 {
-	private final int VR_REQUEST_CODE = 1337;
+	public static final int VR_REQUEST_CODE = 1337;
+	public static final int VR_REQUEST_LISTEN = 1338;
+	public static final int VR_REQUEST_SMS = 1339;
 	
 	private Activity activity;
 	private String results[];
@@ -21,7 +23,7 @@ public class SpeechRecognizer
 	}
 	
 	
-	public void startRecognizer()
+	public void startRecognizer(int functionCode)
 	{
 		Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
 
@@ -38,15 +40,15 @@ public class SpeechRecognizer
 		// Specify how many results you want to receive. The results will be
 		// sorted
 		// where the first result is the one with higher confidence.
-		intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 5);
+		intent.putExtra(RecognizerIntent.EXTRA_MAX_RESULTS, 1);
 
-		activity.startActivityForResult(intent, VR_REQUEST_CODE);
+		activity.startActivityForResult(intent, functionCode);
 	}
 	
 	
 	public void onActivityResult(int requestCode, int resultCode, Intent data)
 	{
-		if (requestCode == VR_REQUEST_CODE && resultCode == Activity.RESULT_OK)
+		if ((requestCode == VR_REQUEST_LISTEN || requestCode == VR_REQUEST_SMS) && resultCode == Activity.RESULT_OK)
 		{
 			// Fill the list view with the strings the recognizer thought it
 			// could have heard
