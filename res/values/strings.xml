@@ -2,9 +2,12 @@
 
     <string name="app_name">Driver Companion</string>
     <string name="menu_settings">Settings</string>
-    <string name="btn_listen">Listen</string>
+    <string name="btn_listen">Tap to Listen</string>
     <string name="log_tag">DriverCompanion</string>
     <string name="pref_category_general">General</string>
     <string name="speech_dialog_title">Say a command.</string>
+    <string name="say_command">Please say a command.</string>
+    <string name="did_you_say">Did you say?</string>
+    <string name="what_sms">What would you like your message to say?</string>
 
 </resources>
